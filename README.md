@@ -282,6 +282,7 @@ pc17-dpl@a109pc17dpl:~/travelroad$ vi src/main/resources/templates/home.html
 </html>
 ```
 
+<<<<<<< HEAD
 A continuaiñon configuramos el fichero de dependencias para Maven:
 
 ```
@@ -371,3 +372,4 @@ pc17-dpl@a109pc17dpl:~/travelroad$ ./mvnw package
 #### ***Conclusiones***. <a name="id5"></a>
 
 En esta parte debemos exponer las conclusiones que sacamos del desarrollo de la prácica.
+

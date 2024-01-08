@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My Travel Bucket List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>My Travel Bucket List</h1>
+    <h2>Places I'd Like to Visit</h2>
+    <ul th:each="place : ${wished}">
+      <li th:text="${place.name}"></li>
+    </ul>
+
+    <h2>Places I've Already Been To</h2>
+    <ul th:each="place : ${visited}">
+      <li th:text="${place.name}"></li>
+    </ul>
+</body>
+</html>
