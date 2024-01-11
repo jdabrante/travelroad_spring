@@ -6,9 +6,9 @@
 </head>
 <body>
     <h1>My Travel Bucket List</h1>
-    <a href="/visited">Places I've Already Been To</a>
-    <br>
-    <a href="/wished">Places I'd Like to Visit</a>
-    <p>Powered by Springboot &#10024;</p>
+    <h2>Places I'd Like to Visit</h2>
+    <ul th:each="place : ${wished}">
+      <li th:text="${place.name}"></li>
+    </ul>
 </body>
 </html>
