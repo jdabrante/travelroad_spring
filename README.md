@@ -282,8 +282,7 @@ pc17-dpl@a109pc17dpl:~/travelroad$ vi src/main/resources/templates/home.html
 </html>
 ```
 
-<<<<<<< HEAD
-A continuaiñon configuramos el fichero de dependencias para Maven:
+A continuación configuramos el fichero de dependencias para Maven:
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -367,6 +366,198 @@ Y un empaquetado:
 
 ```
 pc17-dpl@a109pc17dpl:~/travelroad$ ./mvnw package
+```
+
+### Servidor de producción
+
+Para la configuración en producción se deberá de crear un script para que realice los pasos del proceso de construcción una vez se suben nuevos cambios al repositorio remotodo por medio del deploy.sh. Para ello se crea el fichero run.sh con el siguiente contenido dentro de la carpeta del proyecto:
+
+```
+nano run.sh
+```
+
+Con el siguiente contenido:
+
+```
+#!/bin/bash
+
+cd /home/dimas/travelroad_spring/travelroad
+
+./mvnw package  # el empaquetado ya incluye la compilación
+
+# ↓ Último fichero JAR generado
+JAR=`ls target/*.jar -t | head -1`
+/usr/bin/java -jar $JAR
+```
+
+Y le damos permisos de ejecución:
+
+```
+chmod +x run.sh
+```
+
+El siguiente paso es la creación de un fichero de servicio para gestionarlo mediante systemd:
+
+```
+mkdir -p ~/.config/systemd/user
+nano ~/.config/systemd/user/travelroad.service
+```
+
+Con el siguiente contenido:
+
+```
+[Unit]
+Description=Spring Boot TravelRoad
+
+[Service]
+Type=simple
+StandardOutput=journal
+ExecStart=/home/dimas/travelroad_spring/travelroad/run.sh
+
+[Install]
+WantedBy=default.target
+```
+Hecho esto, habilitamos el servicio para que este se arranque de manera automática:
+
+```
+systemctl --user enable travelroad.service
+```
+
+Iniciamos el servicio:
+
+```
+systemctl --user start travelroad.service
+```
+
+Y por último la configuración de nginx:
+
+```
+server {
+    server_name travelroad;
+
+    location / {
+        proxy_pass http://localhost:8080;  # socket TCP
+    }
+}
+```
+
+Además, podemos crear un scipt de despliegue para, una vez hechos cambios en desarrollo, estos se despliguen directamente en producción:
+
+```
+#!/bin/bash
+
+cd usr/share/nginx/travelroad_spring
+sudo git add .
+sudo git commit -m "Changes"
+sudo git push
+
+ssh dimas@dimas.arkania.es "
+  cd /home/dimas/travelroad_spring
+  git pull
+  systemctl --user restart travelroad.service
+"
+```
+
+#### Modificación del proyecto
+
+Una vez terminada la configuración del proyecto en la parte de desarrollo y producción, el siguiente paso será modificar el proyecto en desarrollo. En el caso que nos ocupa se ha separado los lugares visitos y a visitar. Para ello simplemente ha sido necesario configurar el fichero HomeController.java ( el cual se encarga de gestionar las rutas y las variables que se le pasarán a esta ):
+
+```
+package edu.dpl.travelroad.controllers;
+
+import edu.dpl.travelroad.models.Place;
+import edu.dpl.travelroad.repositories.PlaceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HomeController {
+    private final PlaceRepository placeRepository;
+
+    @Autowired
+    public HomeController(PlaceRepository placeRepository) {
+        this.placeRepository = placeRepository;
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("wished", placeRepository.findByVisited(false));
+        model.addAttribute("visited", placeRepository.findByVisited(true));
+        return "home";  // home.html
+    }
+
+    @GetMapping("/visited")
+    public String visited(Model model) {
+        model.addAttribute("visited", placeRepository.findByVisited(true));
+        return "visited"; // visited.html
+    }
+
+   @GetMapping("/wished")
+   public String wished(Model model) {
+        model.addAttribute("wished", placeRepository.findByVisited(false));
+        return "wished"; // wished.html
+   }
+}
+```
+Y por otro lado se han creado dos plantillas nuevas y editado la plantilla home de la siguiente manera:
+- home.html:
+
+```
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My Travel Bucket List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>My Travel Bucket List</h1>
+    <a href="/visited">Places I've Already Been To</a>
+    <br>
+    <a href="/wished">Places I'd Like to Visit</a>
+    <p>Powered by Springboot &#10024;</p>
+</body>
+</html>
+```
+- wished.html:
+
+```
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My Travel Bucket List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>My Travel Bucket List</h1>
+    <h2>Places I'd Like to Visit</h2>
+    <ul th:each="place : ${wished}">
+      <li th:text="${place.name}"></li>
+    </ul>
+    <p><a href="/">Go Back</a></p>
+</body>
+</html>
+```
+
+- visited.html:
+
+```
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My Travel Bucket List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>My Travel Bucket List</h1>
+    <h2>Places I've Already Been To</h2>
+    <ul th:each="place : ${visited}">
+      <li th:text="${place.name}"></li>
+    </ul>
+    <p><a href="/">Go Back</a></p>
+    </body>
+</html>
 ```
 
 #### ***Conclusiones***. <a name="id5"></a>
