@@ -559,7 +559,15 @@ Y por otro lado se han creado dos plantillas nuevas y editado la plantilla home 
     </body>
 </html>
 ```
-
+<br>
+<center>
+	![image1](1s.png)
+<br>
+	![image1](2s.png)
+<br>
+	![image1](3s.png)
+</center>
+<br>
 #### ***Conclusiones***. <a name="id5"></a>
 
 En esta parte debemos exponer las conclusiones que sacamos del desarrollo de la prácica.
