@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd usr/share/nginx/travelroad_spring
+cd /usr/share/nginx/travelroad_spring
 sudo git add .
 sudo git commit -m "Changes"
 sudo git push
