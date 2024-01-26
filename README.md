@@ -22,8 +22,7 @@
 
 #### ***Objetivos***. <a name="id2"></a>
 
-Esta práctica tiene como objetivo desplegar un proyecto con el framework para php, Laravel, dentro de un servidor web nginx y una base de datos postgreSQL.
-Material empleado.
+Esta práctica tiene como objetivo desplegar un proyecto con el framework para java, Spring, dentro de un servidor web nginx y una base de datos postgreSQL.
 
 #### ***Material empleado***. <a name="id3"></a>
 
