@@ -20,15 +20,14 @@
 
 #### ***Introducción***. <a name="id1"></a>
 
-Aquí explicamos brevemente la parte teórica que tiene que ver con la práctica que se va a realizar
-
 #### ***Objetivos***. <a name="id2"></a>
 
-Aquí explicamos los objetivos que se pretenden alcanzar al realizar la práctica.
+Esta práctica tiene como objetivo desplegar un proyecto con el framework para php, Laravel, dentro de un servidor web nginx y una base de datos postgreSQL.
+Material empleado.
 
 #### ***Material empleado***. <a name="id3"></a>
 
-Enumeramos el material empleado tanto hardware como software y las conficuraciones que hacemos (configuraciones de red por ejemplo) 
+Para la realización de esta práctica se ha utilizado una máquina virtual Debian12 como máquina de desarrollo y otra Debian12 en una VPS de Azure como máquina de producción.izar
 
 #### ***Desarrollo***. <a name="id4"></a>
 
@@ -575,6 +574,5 @@ Y por otro lado se han creado dos plantillas nuevas y editado la plantilla home 
 </center>
 <br>
 #### ***Conclusiones***. <a name="id5"></a>
-
-En esta parte debemos exponer las conclusiones que sacamos del desarrollo de la prácica.
+En esta práctica hemos aprenido como desplegar una aplicación con el framework para Java, Spring. La conclusión principal a la que se puede llegar es que existe una diferencia entre el despliegue de frameworks,
 
